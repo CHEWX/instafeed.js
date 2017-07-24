@@ -161,6 +161,7 @@
             imageString = this._makeTemplate(this.options.template, {
               model: image,
               id: image.id,
+              time_ago: this._timeSince( new Date( parseInt( image.created_time ) * 1000 ) ),
               link: image.link,
               type: image.type,
               image: imageUrl,
@@ -297,6 +298,33 @@
         });
       }
       return output;
+    };
+
+    Instafeed.prototype._timeSince = function( date ) {
+      // Ref: https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
+      var seconds = Math.floor((new Date() - date) / 1000);
+      var interval = Math.floor(seconds / 31536000);
+      if (interval > 1) {
+        return interval + " years ago";
+      }
+      interval = Math.floor(seconds / 2592000);
+      if (interval > 1) {
+        return interval + " months ago";
+      }
+      interval = Math.floor(seconds / 86400);
+      if (interval > 1) {
+        return interval + " days ago";
+      }
+      interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " hours ago";
+      }
+      interval = Math.floor(seconds / 60);
+      if (interval > 1) {
+        return interval + " mins ago";
+      }
+      return Math.floor(seconds) + " secs ago";
+
     };
 
     Instafeed.prototype._getObjectProperty = function(object, property) {
